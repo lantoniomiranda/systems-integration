@@ -36,3 +36,16 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as ser
     # start the server
     print("Starting the RPC Server...")
     server.serve_forever()
+
+
+# readCSV
+
+# convertXml
+
+# storeToDB
+
+# getTop10PlayersWithHighestPtsAvg()
+
+# getHighestScoringSeasonByPlayer(player)
+
+# getTop5PLayersWithMostTripleDoublesSeasons()
