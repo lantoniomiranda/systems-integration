@@ -14,7 +14,7 @@ down:
 	docker compose down
 
 server:
-	docker-compose run --entrypoint "python main.py" rpc-server
+	docker compose run --entrypoint "python main.py" rpc-server
 
 client:
-	docker-compose run --entrypoint "python main.py" rpc-client
+	docker compose run --entrypoint "python main.py" rpc-client
