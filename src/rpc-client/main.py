@@ -6,7 +6,7 @@ def connect_to_server(retry_attempts=5, delay_seconds=2):
     for attempt in range(1, retry_attempts + 1):
         try:
             print(f"Connecting to the server (Attempt {attempt}/{retry_attempts})...")
-            server = xmlrpc.client.ServerProxy('http://is-rpc-server:9000', allow_none=True)
+            server = xmlrpc.client.ServerProxy('http://is-rpc-server:9000')
             print("Connection successful.")
             return server
         except ConnectionError as ce:

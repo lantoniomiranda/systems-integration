@@ -30,10 +30,6 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as ser
     signal.signal(signal.SIGHUP, signal_handler)
     signal.signal(signal.SIGINT, signal_handler)
 
-    converter = CSVtoXMLConverter('/data/all_seasons.csv')
-    if converter:
-        Database.storeFile('allSeasons.xml_converter')
-
     # register both functions
     server.register_function(string_reverse)
     server.register_function(string_length)

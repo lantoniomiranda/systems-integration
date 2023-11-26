@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
-from entities.player import Player
-from entities.season import Season
+from .player import Player
+from .season import Season
 
 
 class Stats:

@@ -1,14 +1,14 @@
 import os.path
 import xml.dom.minidom as md
 import xml.etree.ElementTree as ET
-from csv_reader import CSVReader
-from entities.country import Country
-from entities.team import Team
-from entities.player import Player
-from entities.stats import Stats
-from entities.season import Season
-from entities.college import College
-from validator import validate
+
+from .csv_reader import CSVReader
+from .entities.college import College
+from .entities.country import Country
+from .entities.player import Player
+from .entities.season import Season
+from .entities.stats import Stats
+from .entities.team import Team
 
 
 class CSVtoXMLConverter:
