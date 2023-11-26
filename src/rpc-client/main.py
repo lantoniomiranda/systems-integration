@@ -1,13 +1,6 @@
 import time
 import xmlrpc.client
 
-print("connecting to server...")
-server = xmlrpc.client.ServerProxy('http://is-rpc-server:9000')
-
-file = "../../docker/volumes/data/all_seasons.csv"
-
-print(f" > {server.string_reverse(string)}")
-print(f" > {server.string_length(string)}")
 
 def connect_to_server(retry_attempts=5, delay_seconds=2):
     for attempt in range(1, retry_attempts + 1):
