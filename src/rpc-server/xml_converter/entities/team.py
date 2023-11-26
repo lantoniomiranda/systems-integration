@@ -9,7 +9,6 @@ class Team:
         self._abbreviation = abbreviation
         self._players = []
 
-
     def to_xml(self):
         el = ET.Element("Team")
         el.set("id", str(self._id))

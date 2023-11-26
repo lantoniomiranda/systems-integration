@@ -1,10 +1,11 @@
-import signal, sys
-from xmlrpc.server import SimpleXMLRPCServer
+import signal
+import sys
 from xmlrpc.server import SimpleXMLRPCRequestHandler
+from xmlrpc.server import SimpleXMLRPCServer
+
 from functions.string_length import string_length
 from functions.string_reverse import string_reverse
-from database.utils import Database
-from xml_converter.csv_to_xml_converter import CSVtoXMLConverter
+from functions.manage_files import import_csv
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -33,11 +34,11 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as ser
     # register both functions
     server.register_function(string_reverse)
     server.register_function(string_length)
+    server.register_function(import_csv)
 
     # start the server
     print("Starting the RPC Server...")
     server.serve_forever()
-
 
 
 # readCSV
