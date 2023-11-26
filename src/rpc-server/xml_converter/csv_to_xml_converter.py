@@ -10,6 +10,7 @@ from entities.season import Season
 from entities.college import College
 from validator import validate
 
+
 class CSVtoXMLConverter:
 
     def __init__(self, path):
@@ -87,7 +88,7 @@ class CSVtoXMLConverter:
         #     # after_create=after_creating_player
         # )
 
-        # generate the final xml
+        # generate the final xml_converter
         root_el = ET.Element("NBA")
 
         teams_el = ET.Element("Teams")
@@ -124,14 +125,20 @@ class CSVtoXMLConverter:
         return root_el
 
     def to_xml_str(self):
-        xml_str = ET.tostring(self.to_xml(), encoding='utf8', method='xml').decode()
+        xml_str = ET.tostring(self.to_xml(), encoding='utf8', method='xml_converter').decode()
         dom = md.parseString(xml_str)
         pretty_xml_str = dom.toprettyxml()
 
-        validate(pretty_xml_str)
-
         # save as file
-        file_path = os.path.join(os.path.dirname(__file__), 'allSeasons.xml')
-        with open(file_path, 'w', encoding='utf-8') as file:
-            file.write(pretty_xml_str)
+        file_path = os.path.join(os.path.dirname(__file__), 'allSeasons.xml_converter')
+        try:
+            with open(file_path, 'w', encoding='utf-8') as file:
+                file.write(pretty_xml_str)
+            print("File 'allSeasons.xml_converter' created successfully!")
+            return True
+        except Exception as e:
+            print(f"Failed to create file: {e}")
+            return False
+
+
 

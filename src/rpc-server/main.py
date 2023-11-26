@@ -3,6 +3,9 @@ from xmlrpc.server import SimpleXMLRPCServer
 from xmlrpc.server import SimpleXMLRPCRequestHandler
 from functions.string_length import string_length
 from functions.string_reverse import string_reverse
+from database.utils import Database
+from xml_converter.csv_to_xml_converter import CSVtoXMLConverter
+
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
@@ -27,6 +30,10 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as ser
     signal.signal(signal.SIGHUP, signal_handler)
     signal.signal(signal.SIGINT, signal_handler)
 
+    converter = CSVtoXMLConverter('/data/all_seasons.csv')
+    if converter:
+        Database.storeFile('allSeasons.xml_converter')
+
     # register both functions
     server.register_function(string_reverse)
     server.register_function(string_length)
@@ -34,7 +41,6 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as ser
     # start the server
     print("Starting the RPC Server...")
     server.serve_forever()
-
 
 # readCSV
 

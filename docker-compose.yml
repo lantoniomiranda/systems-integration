@@ -25,14 +25,6 @@ services:
     depends_on:
       - rpc-server
 
-  sample-xml-generation:
-    container_name: is-xml-generation
-    build: docker/images/python
-    volumes:
-      - "./src/samples/xml-generation:/app"
-      - "./docker/volumes/data:/data"
-    depends_on:
-      - rpc-server
 
 volumes:
   postgres_data:
