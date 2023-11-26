@@ -1,4 +1,4 @@
-import string
+import time
 import xmlrpc.client
 
 print("connecting to server...")
@@ -9,7 +9,28 @@ file = "../../docker/volumes/data/all_seasons.csv"
 print(f" > {server.string_reverse(string)}")
 print(f" > {server.string_length(string)}")
 
-def menu():
+def connect_to_server(retry_attempts=5, delay_seconds=2):
+    for attempt in range(1, retry_attempts + 1):
+        try:
+            print(f"Connecting to the server (Attempt {attempt}/{retry_attempts})...")
+            server = xmlrpc.client.ServerProxy('http://is-rpc-server:9000', allow_none=True)
+            print("Connection successful.")
+            return server
+        except ConnectionError as ce:
+            print(f"Error: Unable to connect to the server. {ce}")
+        except Exception as e:
+            print(f"Error: An unexpected error occurred. {e}")
+
+        if attempt < retry_attempts:
+            print(f"Retrying in {delay_seconds} seconds...")
+            time.sleep(delay_seconds)
+
+    raise ConnectionError(f"Failed to connect after {retry_attempts} attempts. Please check the connection.")
+
+
+def main():
+    server = connect_to_server()
+
     while True:
         print("----------SYSTEMS INTEGRATION----------")
         print("0 -\tClose the Program")
@@ -19,34 +40,32 @@ def menu():
         print("4 -\tQuery4")
         print("5 -\tQuery5")
 
-        while True:
-            try:
-                selection = input("\tSelect one option: ")
-            except Exception:
-                selection = input("\tSelect one option: ")
-            if selection in range(6):
-                break
+        selection = input("\tSelect one option: ")
 
-        if selection==1:
+        if selection == '1':
             result = server.getTop10PlayersWithHighestPtsAvg()
             print(result)
             # function to show data
-        elif selection==2:
+        elif selection == '2':
             player = input("\tEnter the player name: ")
             result = server.getHighestScoringSeasonByPlayer(player)
             print(result)
             # function to show data
-        elif selection==3:
+        elif selection == '3':
             result = server.getTop5PLayersWithMostTripleDoublesSeasons() # +10pts, +10ast, +10rebs
             print(result)
             # function to show data
-        elif selection==4:
+        elif selection == '4':
             result = server.escolherQuery()
             print(result)
             # function to show data
-        elif selection==5:
+        elif selection == '5':
             result = server.escolherQuery()
             print(result)
             # function to show data
-        elif selection==0:
+        elif selection == '0':
             break
+
+
+if __name__ == "__main__":
+    main()

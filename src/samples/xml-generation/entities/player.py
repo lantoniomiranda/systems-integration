@@ -18,6 +18,9 @@ class Player:
         el.set("country_ref", str(self._country.get_id()))
         return el
 
+    def get_id(self):
+        return self._id
+
     def __str__(self):
         return f"{self._name}, age:{self._age}, country:{self._country}"
 
