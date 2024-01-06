@@ -19,5 +19,5 @@ server:
 client:
 	docker compose run --entrypoint "python main.py" rpc-client
 
-generation:
-	docker compose run --entrypoint "python main.py" sample-xml-generation
+db:
+	docker compose run db

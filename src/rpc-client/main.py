@@ -7,7 +7,7 @@ def connect_to_server(retry_attempts=5, delay_seconds=2):
     for attempt in range(1, retry_attempts + 1):
         try:
             print(f"Connecting to the server (Attempt {attempt}/{retry_attempts})...")
-            server = xmlrpc.client.ServerProxy('http://is-rpc-server:9000/')
+            server = xmlrpc.client.ServerProxy('http://is-rpc-server:9000/RPC2')
             print("Connection successful.")
             return server
         except ConnectionError as ce:
@@ -33,6 +33,7 @@ def main():
         print("3 -\tTop 5 players with the most triple double seasons")
         print("4 -\tQuery4")
         print("5 -\tQuery5")
+        print("6 -\tChoose File")
 
         selection = input("\tSelect one option: ")
 

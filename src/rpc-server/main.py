@@ -12,8 +12,9 @@ class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
 
-with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as server:
+with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler, allow_none=True) as server:
     server.register_introspection_functions()
+    server.allow_none = True
 
 
     def signal_handler(signum, frame):
@@ -39,7 +40,6 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler) as ser
     # start the server
     print("Starting the RPC Server...")
     server.serve_forever()
-
 
 # readCSV
 

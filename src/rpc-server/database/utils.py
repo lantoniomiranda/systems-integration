@@ -3,7 +3,7 @@ import psycopg2
 
 class Database:
 
-    def storeFile(self, file):
+    def storeFile(self, file, db_file_name):
         global connection, cursor
         try:
             connection = psycopg2.connect(user="is",
@@ -13,7 +13,7 @@ class Database:
                                           database="is")
 
             cursor = connection.cursor()
-            cursor.execute('''INSERT INTO imported_documents(file_name, xml) VALUES ('file_xml', %s)''', (file))
+            cursor.execute('''INSERT INTO imported_documents(file_name, xml) VALUES (%s, %s)''', (db_file_name, file))
 
         except (Exception, psycopg2.Error) as error:
             print("Failed to fetch data", error)

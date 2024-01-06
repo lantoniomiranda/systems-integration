@@ -130,11 +130,11 @@ class CSVtoXMLConverter:
         pretty_xml_str = dom.toprettyxml()
 
         # save as file
-        file_path = os.path.join(os.path.dirname(__file__), 'allSeasons.xml_converter')
+        file_path = os.path.join(os.path.dirname(__file__), 'allSeasons.xml')
         try:
             with open(file_path, 'w', encoding='utf-8') as file:
                 file.write(pretty_xml_str)
-            print("File 'allSeasons.xml_converter' created successfully!")
+            print("File 'allSeasons.xml' created successfully!")
             return True
         except Exception as e:
             print(f"Failed to create file: {e}")
