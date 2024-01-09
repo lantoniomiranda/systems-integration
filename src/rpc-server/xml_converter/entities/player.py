@@ -3,7 +3,7 @@ import xml.etree.ElementTree as ET
 
 class Player:
 
-    def __init__(self, name, age, height, weight, college, country, draft_year, draft_round, draft_number):
+    def __init__(self, name, age, height, weight, college, country, draft_year, draft_round, draft_number, season):
         Player.counter += 1
         self._id = Player.counter
         self._name = name
@@ -15,6 +15,7 @@ class Player:
         self._draft_number = draft_number
         self._age = age
         self._country = country
+        self._season = season
 
     def to_xml(self):
         el = ET.Element("Player")
@@ -28,10 +29,20 @@ class Player:
         el.set("draft_year", str(self._draft_year))
         el.set("draft_round", str(self._draft_round))
         el.set("draft_number", str(self._draft_number))
+        el.set("season", str(self._season))
         return el
 
     def get_id(self):
         return self._id
+
+    def get_college(self):
+        return self._college
+
+    def get_country(self):
+        return self._country
+
+    def get_season(self):
+        return self._season
 
     def __str__(self):
         return f"{self._name}, age:{self._age}, country:{self._country}"

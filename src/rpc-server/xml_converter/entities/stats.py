@@ -35,7 +35,7 @@ class Stats:
         el.set("usg_pct", str(self._usg_pct))
         el.set("ts_pct", str(self._ts_pct))
         el.set("ast_pct", str(self._ast_pct))
-        el.set("season_id", str(self._season.getId()))
+        el.set("season_id", str(self._season))
         el.set("player_id", str(self._player))
         return el
 

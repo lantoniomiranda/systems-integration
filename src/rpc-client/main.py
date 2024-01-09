@@ -59,8 +59,7 @@ def main():
             print(result)
             # function to show data
         elif selection == '6':
-            res = send_csv(server)
-            print(res)
+            send_csv(server)
         elif selection == '0':
             break
 

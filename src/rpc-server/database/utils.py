@@ -15,8 +15,14 @@ class Database:
             cursor = connection.cursor()
             cursor.execute('''INSERT INTO imported_documents(file_name, xml) VALUES (%s, %s)''', (db_file_name, file))
 
+            connection.commit()
+
+            return "File stored successfully in the database."
+
         except (Exception, psycopg2.Error) as error:
             print("Failed to fetch data", error)
+            connection.rollback()
+            return "Error {error}".format(error=error)
 
         finally:
             if connection:
