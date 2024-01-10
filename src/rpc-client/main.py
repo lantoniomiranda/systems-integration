@@ -43,9 +43,8 @@ def main():
             # function to show data
         elif selection == '2':
             player = input("\tEnter the player name: ")
-            result = server.getHighestScoringSeasonByPlayer(player)
+            result = server.get_highest_scoring_season_by_player(player)
             print(result)
-            # function to show data
         elif selection == '3':
             result = server.getTop5PLayersWithMostTripleDoublesSeasons() # +10pts, +10ast, +10rebs
             print(result)

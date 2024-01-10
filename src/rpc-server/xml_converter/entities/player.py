@@ -3,6 +3,8 @@ import xml.etree.ElementTree as ET
 
 class Player:
 
+    # gp, pts, reb, ast, net_rating, oreb_pct,dreb_pct,usg_pct,ts_pct,ast_pct,season
+    #,player_name,team_abbreviation,age,player_height,player_weight,college,country,draft_year,draft_round,draft_number,gp,pts,reb,ast,net_rating,oreb_pct,dreb_pct,usg_pct,ts_pct,ast_pct,season
     def __init__(self, name, age, height, weight, college, country, draft_year, draft_round, draft_number, season):
         Player.counter += 1
         self._id = Player.counter

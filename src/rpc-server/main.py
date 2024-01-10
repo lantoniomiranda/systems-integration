@@ -6,6 +6,7 @@ from xmlrpc.server import SimpleXMLRPCServer
 from functions.string_length import string_length
 from functions.string_reverse import string_reverse
 from functions.manage_files import import_csv
+from functions.queries import get_highest_scoring_season_by_player
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -36,6 +37,7 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler, allow_
     server.register_function(string_reverse)
     server.register_function(string_length)
     server.register_function(import_csv)
+    server.register_function(get_highest_scoring_season_by_player)
 
     # start the server
     print("Starting the RPC Server...")

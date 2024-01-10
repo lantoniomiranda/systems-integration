@@ -1,9 +1,8 @@
-from db.main import PostgresDB
+from database import database
 
 
 def get_top_10_players_with_highest_pts_avg():
     try:
-        db = PostgresDB()
 
         query = '''
             SELECT player_ref,
@@ -19,7 +18,7 @@ def get_top_10_players_with_highest_pts_avg():
             LIMIT 10;
         '''
 
-        results = db.execute_query(query)
+        results = database.execute_query(query)
         if results:
             top_players = [{'player_ref': row[0], 'avg_pts': row[1]} for row in results]
             return top_players
@@ -30,41 +29,33 @@ def get_top_10_players_with_highest_pts_avg():
         print(f"Error: {e}")
         return None
     finally:
-        db.close_connection()
+        database.close_connection()
 
 
-def get_highest_scoring_season_by_player(player_id):
+def get_highest_scoring_season_by_player(player_name):
     try:
-        db = PostgresDB()
-
         query = '''
-            SELECT season
-                CAST(pts AS FLOAT) as points
+            SELECT season, points
             FROM (
-                SELECT  unnest(xpath('//Player[@id=$PLAYER_ID]/Seasons/Season/@name', xml_converter))::text AS season,
-                        unnest(xpath('//Player[@id=$PLAYER_ID]/Seasons/Season/Stats/Points/text()', xml_converter))::text AS pts
+                SELECT
+                    unnest(xpath('//Player[@name=$PLAYER_NAME]/season/text()', xml, ARRAY[ARRAY['PLAYER_NAME', %s]]))::text AS season,
+                    unnest(xpath('//Player[@name=$PLAYER_NAME]/Stats/pts/text()', xml, ARRAY[ARRAY['PLAYER_NAME', %s]]))::text AS points
                 FROM imported_documents
-                WHERE deleted_on IS NULL
-            ) as player_seasons
-            ORDER BY points DESC
+            ) AS player_seasons
+            ORDER BY points::float DESC
             LIMIT 1;
         '''
 
-        results = db.execute_query(query)
-        if results:
-            return [{'player_id': row[0], 'triple_double_seasons': row[1]} for row in results]
-        else:
-            return None
+        results = database.execute_query(query, (player_name, player_name))
+        return results
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"An error occurred: {e}")
         return None
-    finally:
-        db.close_connection()
+
 
 
 def get_top_5_players_with_most_triple_double_seasons():
-    db = PostgresDB()
     try:
         query = '''
             WITH PlayerStats AS (
@@ -107,7 +98,7 @@ def get_top_5_players_with_most_triple_double_seasons():
                 triple_double_seasons DESC
             LIMIT 5;
         '''
-        results = db.execute_query(query)
+        results = database.execute_query(query)
         if results:
             return [{'player_id': row[0], 'triple_double_seasons': row[1]} for row in results]
         else:
@@ -117,11 +108,10 @@ def get_top_5_players_with_most_triple_double_seasons():
         print(f"Error: {e}")
         return None
     finally:
-        db.close_connection()
+        database.close_connection()
 
 
 def get_most_improved_player():
-    db = PostgresDB()
     try:
         query = '''
             WITH SeasonStats AS (
@@ -152,7 +142,7 @@ def get_most_improved_player():
             ORDER BY improvement DESC
             LIMIT 1;
         '''
-        results = db.execute_query(query)
+        results = database.execute_query(query)
         if results:
             return {'player_ref': results[0][0], 'improvement': results[0][1]}
         else:
@@ -162,12 +152,11 @@ def get_most_improved_player():
         print(f"Error: {e}")
         return None
     finally:
-        db.close_connection()
+        database.close_connection()
 
 
 # PER = Player Efficiency Rating
 def get_top_10_players_by_per():
-    db = PostgresDB()
     try:
         query = '''
             WITH PlayerStats AS (
@@ -202,7 +191,7 @@ def get_top_10_players_by_per():
             ORDER BY avg_per DESC
             LIMIT 10;
         '''
-        results = db.execute_query(query)
+        results = database.execute_query(query)
         if results:
             return [{'player_ref': row[0], 'avg_per': row[1]} for row in results]
         else:
@@ -212,11 +201,10 @@ def get_top_10_players_by_per():
         print(f"Error: {e}")
         return None
     finally:
-        db.close_connection()
+        database.close_connection()
 
 
 def get_best_colleges_for_nba_talent():
-    db = PostgresDB()
     try:
         query = '''
             WITH CollegePerformance AS (
@@ -249,7 +237,7 @@ def get_best_colleges_for_nba_talent():
             ORDER BY num_players DESC, avg_points DESC
             LIMIT 10;
         '''
-        results = db.execute_query(query)
+        results = database.execute_query(query)
         if results:
             return [{
                 'college': row[0],
@@ -265,6 +253,6 @@ def get_best_colleges_for_nba_talent():
         print(f"Error: {e}")
         return None
     finally:
-        db.close_connection()
+        database.close_connection()
 
 

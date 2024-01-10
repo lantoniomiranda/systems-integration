@@ -18,27 +18,6 @@ class CSVtoXMLConverter:
 
     def to_xml(self):
 
-        colleges = self._reader.read_entities(
-            attrs=["college"],
-            builder=lambda row: College(row["college"])
-        )
-
-        countries = self._reader.read_entities(
-            attrs=["country"],
-            builder=lambda row: Country(row["country"])
-        )
-
-        # read teams
-        teams = self._reader.read_entities(
-            attrs=["team_abbreviation"],
-            builder=lambda row: Team(row["team_abbreviation"])
-        )
-
-        seasons = self._reader.read_entities(
-            attrs=["season"],
-            builder=lambda row: Season(row["season"])
-        )
-
         players = self._reader.read_entities(
             attrs=["player_name", "season"],
             builder=lambda row: Player(
@@ -73,91 +52,60 @@ class CSVtoXMLConverter:
             )
         )
 
-
-        # def after_creating_player(player, row, season):
-        #     # add the player to the appropriate team
-        #     stats[row["player"]].add_player(player)
-
-
-        # self._reader.read_entities(
-        #     attrs=["full_name"],
-        #     builder=lambda row: Player(
-        #         name=row["player_name"],
-        #         age=row["age"],
-        #         country=countries[row["country"]]
-        #     ),
-        #     # after_create=after_creating_player
-        # )
-
         root_el = ET.Element("NBA")
 
-        # Group players by season
         players_by_season = {}
         for player in players.values():
-            season = player._season  # Assuming player has a season attribute
+            season = player.get_season()
             if season not in players_by_season:
                 players_by_season[season] = []
             players_by_season[season].append(player)
 
-        # Now iterate over seasons
-
-        for season_year, season_players in players_by_season.items():
+        for season, season_players in players_by_season.items():
             season_el = ET.SubElement(root_el, "Season")
-            season_el.set('season', season_year)
+            season_el.set('season', season)
 
             for player in season_players:
                 player_el = ET.Element("Player")
                 player_el.set('id', str(player.get_id()))
-                player_el.set('college_id', str(player.get_college()))
-                player_el.set('country_ref', player.get_country())
+                player_el.set('name', str(player._name))
 
-                # Create child elements for the player attributes
                 ET.SubElement(player_el, "name").text = player._name
+                ET.SubElement(player_el, 'country').text = player.get_country()
                 ET.SubElement(player_el, "age").text = str(player._age)
                 ET.SubElement(player_el, "height").text = str(player._height)
                 ET.SubElement(player_el, "weight").text = str(player._weight)
                 ET.SubElement(player_el, "draft_year").text = player._draft_year
                 ET.SubElement(player_el, "draft_round").text = player._draft_round
+                ET.SubElement(player_el, 'college').text = player.get_college()
                 ET.SubElement(player_el, "draft_number").text = player._draft_number
-                ET.SubElement(player_el, "season").text = player._season
+                ET.SubElement(player_el, "season").text = player.get_season()
+
+                for stat in stats.values():
+                    if stat._player == player._name:
+                        if stat._season == player.get_season():
+                            stat_el = ET.Element("Stats")
+                            ET.SubElement(stat_el, "gp").text = str(stat._gp)
+                            ET.SubElement(stat_el, "pts").text = str(stat._pts)
+                            ET.SubElement(stat_el, "reb").text = str(stat._reb)
+                            ET.SubElement(stat_el, "ast").text = str(stat._ast)
+                            ET.SubElement(stat_el, "net_rating").text = str(stat._net_rating)
+                            ET.SubElement(stat_el, "oreb_pct").text = str(stat._oreb_pct)
+                            ET.SubElement(stat_el, "dreb_pct").text = str(stat._dreb_pct)
+                            ET.SubElement(stat_el, "usg_pct").text = str(stat._usg_pct)
+                            ET.SubElement(stat_el, "ts_pct").text = str(stat._ts_pct)
+                            ET.SubElement(stat_el, "ast_pct").text = str(stat._ast_pct)
+
+                            player_el.append(stat_el)
 
                 season_el.append(player_el)
-                root_el.append(season_el)
 
-        # teams_el = ET.Element("Teams")
-        # for team in teams.values():
-        #     teams_el.append(team.to_xml())
-        #
-        # countries_el = ET.Element("Countries")
-        # for country in countries.values():
-        #     countries_el.append(country.to_xml())
-        #
-        # colleges_el = ET.Element("Colleges")
-        # for college in colleges.values():
-        #     colleges_el.append(college.to_xml())
-        #
-        # seasons_el = ET.Element("Seasons")
-        # for season in seasons.values():
-        #     seasons_el.append(season.to_xml())
-        #
-        # stats_el = ET.Element("Stats")
-        # for stat in stats.values():
-        #     stats_el.append(stat.to_xml())
-        #
-        # players_el = ET.Element("Players")
-        # for player in players.values():
-        #     players_el.append(player.to_xml())
-        #
-        # root_el.append(teams_el)
-        # root_el.append(countries_el)
-        # root_el.append(colleges_el)
-        # root_el.append(stats_el)
-        # root_el.append(seasons_el)
+        assert len(root_el) == len(players_by_season), "Extra content found after root element"
 
         return root_el
 
     def to_xml_str(self):
-        root_el = self.to_xml()  # Get the root element from the to_xml method
+        root_el = self.to_xml()
 
         try:
             # Convert the XML element to a string
@@ -166,15 +114,15 @@ class CSVtoXMLConverter:
             pretty_xml_str = dom.toprettyxml()
 
             # Save as a file
-            file_path = os.path.join(os.path.dirname(__file__), 'allSeasons.xml')
+            file_path = os.path.join('/data', 'allSeasons.xml')
             with open(file_path, 'w', encoding='utf-8') as file:
                 file.write(pretty_xml_str)
 
             print("File 'allSeasons.xml' created successfully!")
-            return pretty_xml_str  # Return the XML string instead of True
+            return pretty_xml_str
         except Exception as e:
             print(f"Failed to create file: {e}")
-            return "Failed"  # Return None in case of failure
+            return "Failed"
 
 
 
