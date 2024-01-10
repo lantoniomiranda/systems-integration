@@ -31,26 +31,24 @@ class Database:
                 cursor.close()
                 connection.close()
 
-    def query(self, query):
+    def query(self, query, params=None):
         global connection, cursor
-        try:
-            connection = psycopg2.connect(user="is",
+
+        connection = psycopg2.connect(user="is",
                                           password="is",
                                           host="is-db",
                                           port="5432",
                                           database="is")
 
-            print('Connected to database...')
-            cursor = connection.cursor()
-            cursor.execute(query)
-            result = cursor.fetchone()
-            return result
+        print('Connected to database...')
+        cursor = connection.cursor()
+        cursor.execute(query, params)
+        result = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        print('Cursor executed')
+        return result
 
-        except (Exception, psycopg2.Error) as error:
-            print("Failed to fetch data", error)
-            return error
 
-        finally:
-            if connection:
-                cursor.close()
-                connection.close()
+    def hello(self):
+        return 'Hello'

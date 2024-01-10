@@ -38,20 +38,19 @@ def get_highest_scoring_season_by_player(player_name):
             SELECT season, points
             FROM (
                 SELECT
-                    unnest(xpath('//Player[@name=$PLAYER_NAME]/season/text()', xml, ARRAY[ARRAY['PLAYER_NAME', %s]]))::text AS season,
-                    unnest(xpath('//Player[@name=$PLAYER_NAME]/Stats/pts/text()', xml, ARRAY[ARRAY['PLAYER_NAME', %s]]))::text AS points
+                    unnest(xpath('//Player[@name=$1]/season/text()', xml))::text AS season,
+                    unnest(xpath('//Player[@name=$1]/Stats/pts/text()', xml))::text AS points
                 FROM imported_documents
             ) AS player_seasons
             ORDER BY points::float DESC
             LIMIT 1;
         '''
 
-        results = database.execute_query(query, (player_name, player_name))
+        results = database.query(query, (player_name,))
         return results
 
     except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
+        return f"An error occurred: {e}"
 
 
 
