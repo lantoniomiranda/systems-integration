@@ -28,36 +28,24 @@ def main():
     while True:
         print("----------SYSTEMS INTEGRATION----------")
         print("0 -\tClose the Program")
-        print("1 -\tTop 10 pLayers with the highest career points average")
-        print("2 -\tHighest scoring season for specific player")
-        print("3 -\tTop 5 players with the most triple double seasons")
-        print("4 -\tQuery4")
-        print("5 -\tQuery5")
-        print("6 -\tChoose File")
+        print("1 -\tHighest scoring season for specific player")
+        print("2 -\tPLayers with triple double seasons")
+        print("3 -\tTop 5 Colleges")
+        print("4 -\tChoose File")
 
         selection = input("\tSelect one option: ")
 
         if selection == '1':
-            result = server.getTop10PlayersWithHighestPtsAvg()
-            print(result)
-            # function to show data
-        elif selection == '2':
             player = input("\tEnter the player name: ")
             result = server.get_highest_scoring_season_by_player(player)
             print(result)
+        elif selection == '2':
+            result = server.get_players_with_tripleDoubleSeasons() # +10pts, +10ast, +10rebs
+            print(result)
         elif selection == '3':
-            result = server.getTop5PLayersWithMostTripleDoublesSeasons() # +10pts, +10ast, +10rebs
+            result = server.get_top5_colleges()
             print(result)
-            # function to show data
         elif selection == '4':
-            result = server.escolherQuery()
-            print(result)
-            # function to show data
-        elif selection == '5':
-            result = server.escolherQuery()
-            print(result)
-            # function to show data
-        elif selection == '6':
             send_csv(server)
         elif selection == '0':
             break

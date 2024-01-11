@@ -3,7 +3,6 @@ from .enconder_file import encoder_csv
 
 
 def send_csv(server):
-    print('SEND_CSV')
     csv_name = input('Digite o nome do ficheiro: ').strip() + '.csv'
     csv_path = os.path.join('/data', csv_name)
 

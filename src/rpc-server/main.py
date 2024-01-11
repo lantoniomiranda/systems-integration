@@ -6,7 +6,8 @@ from xmlrpc.server import SimpleXMLRPCServer
 from functions.string_length import string_length
 from functions.string_reverse import string_reverse
 from functions.manage_files import import_csv
-from functions.queries import get_highest_scoring_season_by_player
+from functions.queries import get_highest_scoring_season_by_player, get_players_with_tripleDoubleSeasons, \
+    get_top5_colleges
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -38,6 +39,8 @@ with SimpleXMLRPCServer(('0.0.0.0', 9000), requestHandler=RequestHandler, allow_
     server.register_function(string_length)
     server.register_function(import_csv)
     server.register_function(get_highest_scoring_season_by_player)
+    server.register_function(get_players_with_tripleDoubleSeasons)
+    server.register_function(get_top5_colleges)
 
     # start the server
     print("Starting the RPC Server...")

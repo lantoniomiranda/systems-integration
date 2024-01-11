@@ -1,5 +1,6 @@
 import os.path
 import psycopg2
+from psycopg2 import DatabaseError
 
 
 class Database:
@@ -31,24 +32,30 @@ class Database:
                 cursor.close()
                 connection.close()
 
-    def query(self, query, params=None):
+    def query(self, query):
         global connection, cursor
 
-        connection = psycopg2.connect(user="is",
+        try:
+            connection = psycopg2.connect(user="is",
                                           password="is",
                                           host="is-db",
                                           port="5432",
                                           database="is")
 
-        print('Connected to database...')
-        cursor = connection.cursor()
-        cursor.execute(query, params)
-        result = cursor.fetchone()
-        cursor.close()
-        connection.close()
-        print('Cursor executed')
-        return result
+            print('Connected to database...')
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchall()
+            print('Cursor executed')
+            return result
+        except DatabaseError as e:
+            return f"DatabaseError: {e}"
+        except Exception as e:
+            return f"An unexpected error occurred: {e}"
+        finally:
+            cursor.close()
+            connection.close()
 
 
-    def hello(self):
+def hello(self):
         return 'Hello'
