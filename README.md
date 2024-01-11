@@ -4,6 +4,29 @@
 
 Welcome to the Systems Integration Development Kit! This toolkit is specially designed to facilitate the setup of your development environment and manage dependencies effortlessly for the 1st assignment (TP1) in the Systems Integration class, part of the Informatics Engineering course at IPVC/ESTG.
 
+## Running with Makefile ##
+
+1. **docker-compose up -d --build**
+    ```
+    make up
+   ```
+2. **docker-compose start**
+    ```
+    make start
+   ```
+3. **docker-compose stop**
+    ```
+    make stop
+   ```
+4. **docker-compose run --entrypoint "python main.py" rpc-server**
+    ```
+    make server
+   ```
+5. **docker-compose run --entrypoint "python main.py" rpc-server**
+    ```
+    make client
+   ```
+   
 ## Setting Up Your Development Environment ##
 
 Follow the steps below to establish a conducive working environment:
